@@ -1,63 +1,32 @@
-#!/usr/bin/python
-
-# This is a simple echo bot using the decorator mechanism.
-# It echoes any incoming text messages.
-
 import telebot
-import time, threading, schedule
+import random
+from bot_logic import gen_pass
 
-API_TOKEN = 'token'
+    # Замени 'TOKEN' на токен твоего бота
+    # Этот токен ты получаешь от BotFather, чтобы бот мог работать
+bot = telebot.TeleBot("token")
 
-bot = telebot.TeleBot(API_TOKEN)
-
-
-# Handle '/start' and '/help'
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
     bot.reply_to(message, """\
-Hi there, I am EchoBot.
-I am here to echo your kind words back to you. Just say anything nice and I'll say the exact same thing to you!\
+Привет! Я бот который поможет тебе узнать что лучше делать с предметами которые вам не нужны\
 """)
-
-
-# Handle all other messages with content_type 'text' (content_types defaults to ['text'])
-@bot.message_handler(func=lambda message: True)
-def echo_message(message):
-    bot.reply_to(message, message.text)
+choice = random.randint(1,2)
+ar =['Вот несколько идей для поделок из бытового пластика:1. Кашпо для растений: Используйте пластиковые бутылки, обрезав их и украсив красками или тканью. Можно сделать подвесные кашпо, прикрепив веревки.2. Органайзер для канцелярии: Сложите несколько пластиковых контейнеров вместе и украсьте их, чтобы создать органайзер для ручек, карандашей.3. Подставка для телефона: Изогните пластиковую бутылку или используйте крышки от бутылок, чтобы создать подставку для телефона.4. Светильник: Сделайте светильник из пластиковых бутылок, вырезав узоры на стенках и вставив внутрь LED-лампочку.5. Игрушки для детей: Изготавливайте простые игрушки, такие как машинки из крышек или куклы из бутылок.6. Плетеные корзинки: Нарежьте пластиковые пакеты на полоски и сплетите их в корзинки или другие формы.7. Декор для сада: Используйте пластиковые бутылки, чтобы создать фигурки животных или цветы для украшения сада.8. Мозаика: Нарежьте пластиковые крышки на мелкие кусочки и используйте их для создания мозаичных картин или панно.10. Кормушка для птиц: Превратите пластиковую бутылку в кормушку, сделав отверстия для семян и подвесив ее на дереве.']
 
 
 
 
-@bot.message_handler(commands=['help', 'start'])
-def send_welcome(message):
-    bot.reply_to(message, "Hi! Use /set <seconds> to set a timer")
 
 
-def beep(chat_id) -> None:
-    """Send the beep message."""
-    bot.send_message(chat_id, text='Beep!')
+er =['Также ты наверное видел что есть корзины для мусора с надписями пластик и.т.д  так вот если например в корзину где написано пластик выкинуть пластиковый стакан потом его переработают и он снова станет полезным для чего нибудь . Если же ты просто выкинишь что нибудь например телефон то он будет разлагатся 100 лет']
 
 
-@bot.message_handler(commands=['set'])
-def set_timer(message):
-    args = message.text.split()
-    if len(args) > 1 and args[1].isdigit():
-        sec = int(args[1])
-        schedule.every(sec).seconds.do(beep, message.chat.id).tag(message.chat.id)
-    else:
-        bot.reply_to(message, 'Usage: /set <seconds>')
 
-
-@bot.message_handler(commands=['unset'])
-def unset_timer(message):
-    schedule.clear(message.chat.id)
-
-
-if __name__ == '__main__':
-    threading.Thread(target=bot.infinity_polling, name='bot_infinity_polling', daemon=True).start()
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
-
-
-bot.infinity_polling()
+@bot.message_handler(commands=['ecology'])
+def send_ecology(message):
+    if choice == 1:
+        bot.reply_to(message, ar)
+    elif choice == 2:
+        bot.reply_to(message, er)
+bot.polling()
